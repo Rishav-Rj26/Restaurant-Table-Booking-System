@@ -253,8 +253,8 @@ async function seed(): Promise<void> {
   const rusticTables = tables.filter(t => t.restaurantId.equals(rustic._id));
 
   // ── Bookings + Payments (historical for analytics) ─────────────────────────
-  const bookingDocs: Parameters<typeof Booking.insertMany>[0] = [];
-  const paymentDocs: Parameters<typeof Payment.insertMany>[0] = [];
+  const bookingDocs: any[] = [];
+  const paymentDocs: any[] = [];
 
   const statuses = ['confirmed', 'present', 'present', 'present', 'no_show'] as const;
 

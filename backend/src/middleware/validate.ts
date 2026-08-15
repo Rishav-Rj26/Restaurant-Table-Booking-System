@@ -20,7 +20,7 @@ export function validate(schemas: Partial<Record<ValidationTarget, ZodSchema>>) 
         errors[target] = formatZodErrors(result.error);
       } else {
         // Replace the raw input with the parsed/coerced values
-        (req as Record<string, unknown>)[target] = result.data;
+        (req as any)[target] = result.data;
       }
     }
 
