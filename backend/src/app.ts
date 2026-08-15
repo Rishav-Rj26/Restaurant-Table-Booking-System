@@ -10,6 +10,8 @@ import { restaurantRoutes } from './routes/restaurant.routes.js';
 import { searchRoutes } from './routes/search.routes.js';
 import { bookingRoutes } from './routes/booking.routes.js';
 import { paymentRoutes } from './routes/payment.routes.js';
+import { checkinRoutes } from './routes/checkin.routes.js';
+import { analyticsRoutes } from './routes/analytics.routes.js';
 import { handleWebhook } from './controllers/payment.controller.js';
 
 const app = express();
@@ -34,6 +36,8 @@ app.use('/api/v1/restaurants', restaurantRoutes);
 app.use('/api/v1/search', searchRoutes);
 app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/v1/checkin', checkinRoutes);
+app.use('/api/v1/analytics', analyticsRoutes);
 
 // 404 handler
 app.use((req, res, next) => {

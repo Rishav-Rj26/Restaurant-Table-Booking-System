@@ -2,8 +2,12 @@ import { createServer } from 'http';
 import mongoose from 'mongoose';
 import { app } from './app.js';
 import { env } from './config/env.js';
+import { initSocket } from './config/socket.js';
 
 const server = createServer(app);
+
+// Initialize Socket.io
+initSocket(server);
 
 const startServer = async () => {
   try {
@@ -13,6 +17,7 @@ const startServer = async () => {
 
     server.listen(env.PORT, () => {
       console.log(`✅ Server is running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+      console.log(`🔌 Socket.io ready`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
@@ -21,3 +26,4 @@ const startServer = async () => {
 };
 
 startServer();
+
