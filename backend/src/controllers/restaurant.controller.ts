@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as restaurantService from '../services/restaurant.service.js';
 import * as tableService from '../services/table.service.js';
+import * as availabilityService from '../services/availability.service.js';
 import { AuthRequest } from '../types/index.js';
 
 export const createRestaurant = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -77,12 +78,19 @@ export const updateTable = async (req: Request, res: Response, next: NextFunctio
 
 export const getAvailability = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // This will be delegated to availability.service.ts in Phase 5
-    // Returning a placeholder for now
-    res.status(200).json({ 
-      success: true, 
-      data: { message: "Availability engine will be implemented in Phase 5" } 
-    });
+    const { date, partySize } = req.query;
+    
+    if (!date || !partySize) {
+      return res.status(400).json({ success: false, error: { code: 'bad_request', message: 'Missing date or partySize' } });
+    }
+
+    const availableSlots = await availabilityService.getAvailableSlots(
+      req.params.id as string,
+      date as string,
+      parseInt(partySize as string)
+    );
+    
+    res.status(200).json({ success: true, data: availableSlots });
   } catch (error) {
     next(error);
   }

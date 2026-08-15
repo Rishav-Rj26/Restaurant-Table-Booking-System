@@ -7,6 +7,10 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { generalLimiter } from './middleware/rateLimit.js';
 import { authRoutes } from './routes/auth.routes.js';
 import { restaurantRoutes } from './routes/restaurant.routes.js';
+import { searchRoutes } from './routes/search.routes.js';
+import { bookingRoutes } from './routes/booking.routes.js';
+import { paymentRoutes } from './routes/payment.routes.js';
+import { handleWebhook } from './controllers/payment.controller.js';
 
 const app = express();
 
@@ -16,7 +20,7 @@ app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 app.use(morgan('dev'));
 
 // Webhook route must come before express.json() because it needs the raw body
-// app.post('/api/v1/payments/webhook', express.raw({ type: 'application/json' }), webhookHandler);
+app.post('/api/v1/payments/webhook', express.raw({ type: 'application/json' }), handleWebhook);
 
 // Parse JSON bodies
 app.use(express.json());
@@ -27,6 +31,9 @@ app.use('/api', generalLimiter);
 // API Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/restaurants', restaurantRoutes);
+app.use('/api/v1/search', searchRoutes);
+app.use('/api/v1/bookings', bookingRoutes);
+app.use('/api/v1/payments', paymentRoutes);
 
 // 404 handler
 app.use((req, res, next) => {
