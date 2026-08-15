@@ -6,6 +6,7 @@ import { env } from './config/env.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { generalLimiter } from './middleware/rateLimit.js';
 import { authRoutes } from './routes/auth.routes.js';
+import { restaurantRoutes } from './routes/restaurant.routes.js';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api', generalLimiter);
 
 // API Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/restaurants', restaurantRoutes);
 
 // 404 handler
 app.use((req, res, next) => {
