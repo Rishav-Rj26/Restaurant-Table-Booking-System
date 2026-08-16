@@ -1,1 +1,5 @@
-export default function OnboardingPage() { return <div>OnboardingPage</div>; }
+
+
+export default function OnboardingPage() {
+  return <div>Restaurant Onboarding</div>;
+}

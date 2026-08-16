@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+
 import clsx from 'clsx';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
