@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,600&family=Work+Sans:wght@400;600&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -16,8 +17,6 @@
   --font-sans: 'Work Sans', sans-serif;
   --font-serif: 'Literata', serif;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,600&family=Work+Sans:wght@400;600&display=swap');
 
 :root {
   background-color: var(--color-background);

@@ -1,4 +1,4 @@
-
+﻿
 import { useParams, Link } from 'react-router-dom';
 import QRDisplay from '../../components/QRDisplay';
 import Button from '../../components/Button';

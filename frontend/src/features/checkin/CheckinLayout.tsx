@@ -1,4 +1,4 @@
-
+﻿
 import { Outlet, NavLink } from 'react-router-dom';
 import { Home, QrCode, UserPlus, ListTodo } from 'lucide-react';
 import clsx from 'clsx';

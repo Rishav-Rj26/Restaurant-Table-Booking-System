@@ -1,4 +1,4 @@
-
+﻿
 import { MapPin, Star, Clock } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 

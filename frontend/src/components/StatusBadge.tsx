@@ -1,4 +1,4 @@
-
+﻿
 import clsx from 'clsx';
 
 export type BadgeStatus = 'confirmed' | 'held' | 'pending' | 'no_show' | 'present' | 'cancelled' | 'failed';

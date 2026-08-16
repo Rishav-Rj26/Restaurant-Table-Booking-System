@@ -1,4 +1,4 @@
-
+﻿
 import BottomNav from '../../components/BottomNav';
 import StatusBadge from '../../components/StatusBadge';
 
@@ -14,7 +14,7 @@ export default function MyBookingsPage() {
             <h3 className="font-serif font-bold text-lg">The Rusty Spoon</h3>
             <StatusBadge status="confirmed" />
           </div>
-          <p className="text-sm text-outline mb-4">Tonight at 7:30 PM � 2 Guests</p>
+          <p className="text-sm text-outline mb-4">Tonight at 7:30 PM • 2 Guests</p>
           <div className="flex justify-between items-center text-sm font-medium">
             <span className="text-primary font-bold tracking-wider">XX-REST-1234</span>
             <button className="text-secondary hover:underline">View details</button>
