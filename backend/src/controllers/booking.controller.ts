@@ -9,10 +9,6 @@ export const createHold = async (req: AuthRequest, res: Response, next: NextFunc
     const { restaurantId, tableId, slotStart, partySize } = req.body;
     const userId = req.user!.id;
 
-    if (!restaurantId || !tableId || !slotStart || !partySize) {
-      return res.status(400).json({ success: false, error: { code: 'bad_request', message: 'Missing required fields' } });
-    }
-
     const result = await bookingService.createHold(userId, restaurantId, tableId, slotStart, partySize);
     res.status(201).json({ success: true, data: result });
   } catch (error) {

@@ -79,5 +79,19 @@ npm run dev:web
 - **Lint**: `npm run lint`
 - **Test (Backend)**: `npm run test --workspace=backend`
 
+### Quality Checks
+
+Before opening a pull request, run the same checks enforced in CI:
+
+```bash
+npm run build
+npm run lint
+npm run test --workspace=backend
+```
+
+The backend validates booking requests at the API boundary and protects booking
+creation with database-level uniqueness constraints. Configure production
+secrets through your deployment platform; never commit `.env` files.
+
 ## License
 Private / Proprietary

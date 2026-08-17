@@ -1,5 +1,4 @@
-﻿import React, { useState, useEffect, forwardRef } from 'react';
-
+import React, { forwardRef, useId } from 'react';
 import clsx from 'clsx';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -11,15 +10,12 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, helperText, fullWidth = false, className, id, ...props }, ref) => {
-    const inputId = id || React.useId();
+    const generatedId = useId();
+    const inputId = id ?? generatedId;
 
     return (
       <div className={clsx('flex flex-col gap-1.5', fullWidth && 'w-full', className)}>
-        {label && (
-          <label htmlFor={inputId} className="text-sm font-semibold text-on-surface font-sans">
-            {label}
-          </label>
-        )}
+        {label && <label htmlFor={inputId} className="text-sm font-semibold text-on-surface font-sans">{label}</label>}
         <input
           id={inputId}
           ref={ref}
@@ -31,11 +27,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
           {...props}
         />
-        {(error || helperText) && (
-          <span className={clsx('text-sm font-sans', error ? 'text-error' : 'text-outline')}>
-            {error || helperText}
-          </span>
-        )}
+        {(error || helperText) && <span className={clsx('text-sm font-sans', error ? 'text-error' : 'text-outline')}>{error || helperText}</span>}
       </div>
     );
   }

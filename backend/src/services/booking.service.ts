@@ -8,9 +8,7 @@ import { generateQRCode } from './qrcode.service.js';
 import { sendBookingConfirmation, sendCancellationConfirmation } from './email.service.js';
 import { createAppError } from '../middleware/errorHandler.js';
 import { DEFAULT_SLOT_DURATION_MINUTES, HOLD_TTL_MS } from '../config/constants.js';
-
-// Note: Requires socket to be imported if we need to emit events, but we can just use the global io instance or a separate socket service
-// We will emit `booking:confirmed` event here if io is accessible. For now, we omit or add placeholder.
+import { emitBookingConfirmed } from '../sockets/tableStatus.js';
 
 export const createHold = async (
   userId: string,
@@ -20,6 +18,9 @@ export const createHold = async (
   partySize: number
 ) => {
   const slotStart = new Date(slotStartStr);
+  if (Number.isNaN(slotStart.getTime()) || slotStart <= new Date()) {
+    throw createAppError(400, 'bad_request', 'Booking time must be a valid future date');
+  }
   const slotEnd = new Date(slotStart.getTime() + DEFAULT_SLOT_DURATION_MINUTES * 60000);
   const expiresAt = new Date(Date.now() + HOLD_TTL_MS);
 
@@ -113,7 +114,20 @@ export const confirmBooking = async (
   // Send confirmation email asynchronously (do not block transaction)
   sendBookingConfirmation(user, booking, restaurant, qrCodeUrl).catch(console.error);
 
-  // TODO: Emit socket event `booking:confirmed` to restaurant namespace
+  // Realtime updates are best-effort: a socket outage must not roll back a
+  // successful, already-persisted reservation.
+  try {
+    emitBookingConfirmed(hold.restaurantId.toString(), {
+      bookingId: booking._id.toString(),
+      tableId: hold.tableId.toString(),
+      slotStart: booking.slotStart,
+      slotEnd: booking.slotEnd,
+      partySize: booking.partySize,
+      status: booking.status,
+    });
+  } catch (error) {
+    console.error('Failed to broadcast booking confirmation:', error);
+  }
 
   return booking;
 };

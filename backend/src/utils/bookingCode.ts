@@ -14,25 +14,23 @@ export const generateBookingCode = async (restaurantSlug: string): Promise<strin
     return result;
   };
 
-  let isUnique = false;
-  let code = '';
+  const cleanSlug = restaurantSlug.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 10) || 'RESTAURANT';
   
   // Retry loop for collisions
-  while (!isUnique) {
+  // A collision is exceptionally unlikely, but keep the operation bounded so a
+  // damaged index or an adversarial data set can never hang a request.
+  for (let attempt = 0; attempt < 10; attempt += 1) {
     const prefix = getRandomString(2);
     const suffix = getRandomString(4);
     
-    // Ensure slug is uppercase and truncated if it's too long
-    const cleanSlug = restaurantSlug.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 10);
-    
-    code = `${prefix}-${cleanSlug}-${suffix}`;
+    const code = `${prefix}-${cleanSlug}-${suffix}`;
     
     // Check if code exists
     const existing = await Booking.findOne({ bookingCode: code });
     if (!existing) {
-      isUnique = true;
+      return code;
     }
   }
-  
-  return code;
+
+  throw new Error('Could not generate a unique booking code');
 };
