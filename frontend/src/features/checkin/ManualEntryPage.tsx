@@ -17,12 +17,12 @@ export default function ManualEntryPage() {
 
   const checkinMutation = useMutation({
     mutationFn: async (bookingCode: string) => {
-      const res = await api.post(`/checkin/${restaurantId}/verify`, { bookingCode });
+      const res = await api.post('/checkin/verify', { bookingCode, restaurantId });
       return res.data.data;
     },
     onSuccess: (data) => {
       setToast({ type: 'success', message: `Checked in: ${data.guestName ?? 'Guest'} at ${data.tableLabel}` });
-      setTimeout(() => navigate('/checkin'), 2000);
+      setTimeout(() => navigate('/staff'), 2000);
     },
     onError: (e: any) => {
       setToast({ type: 'error', message: e.response?.data?.error?.message ?? 'Check-in failed. Invalid code?' });

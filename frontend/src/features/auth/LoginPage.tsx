@@ -1,7 +1,5 @@
-﻿import React, { useState, useEffect, forwardRef } from 'react';
-
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
 import { api } from '../../services/api';
 import { useAuthStore } from '../../stores/authStore';
 import Button from '../../components/Button';
@@ -15,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isStaff, setIsStaff] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +21,8 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const endpoint = isStaff ? '/auth/staff/login' : '/auth/login';
+      const response = await api.post(endpoint, { email, password });
       const { user, accessToken, refreshToken } = response.data.data;
       
       setTokens(accessToken, refreshToken);
@@ -42,16 +42,27 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-surface flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md px-4">
-        <h2 className="mt-6 text-center text-3xl font-serif font-bold text-on-surface">
-          Sign in to TableGuard
+      <div className="sm:mx-auto sm:w-full sm:max-w-md px-4 flex justify-end">
+        <button 
+          onClick={() => setIsStaff(!isStaff)}
+          className="text-sm text-outline hover:text-secondary font-medium transition-colors"
+        >
+          Sign in as {isStaff ? 'Diner' : 'Staff'}
+        </button>
+      </div>
+      
+      <div className="sm:mx-auto sm:w-full sm:max-w-md px-4 mt-2">
+        <h2 className="text-center text-3xl font-serif font-bold text-on-surface">
+          Sign in to TableGuard {isStaff && <span className="text-primary text-xl block mt-1">(Staff Portal)</span>}
         </h2>
-        <p className="mt-2 text-center text-sm text-outline">
-          Don't have an account?{' '}
-          <Link to="/auth/register" className="font-semibold text-primary hover:text-primary-container">
-            Create one
-          </Link>
-        </p>
+        {!isStaff && (
+          <p className="mt-2 text-center text-sm text-outline">
+            Don't have an account?{' '}
+            <Link to="/auth/register" className="font-semibold text-primary hover:text-primary-container">
+              Create one
+            </Link>
+          </p>
+        )}
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4">

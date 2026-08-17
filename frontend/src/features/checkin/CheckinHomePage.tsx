@@ -28,7 +28,7 @@ export default function CheckinHomePage() {
 
   const checkinMutation = useMutation({
     mutationFn: async (bookingCode: string) => {
-      const res = await api.post(`/checkin/${restaurantId}/verify`, { bookingCode });
+      const res = await api.post('/checkin/verify', { bookingCode, restaurantId });
       return res.data.data;
     },
     onSuccess: (data) => {
@@ -42,7 +42,7 @@ export default function CheckinHomePage() {
 
   const noShowMutation = useMutation({
     mutationFn: async (bookingId: string) => {
-      await api.post(`/checkin/${restaurantId}/no-show`, { bookingId });
+      await api.post(`/checkin/no-show/${bookingId}`);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['today-bookings'] });

@@ -24,7 +24,7 @@ export default function NoShowListPage() {
 
   const noShowMutation = useMutation({
     mutationFn: async (bookingId: string) => {
-      await api.post(`/checkin/${restaurantId}/no-show`, { bookingId });
+      await api.post(`/checkin/no-show/${bookingId}`);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['no-show-candidates'] });
